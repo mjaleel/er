@@ -17,9 +17,10 @@ def add_accountant_info(results_df, accountants_df):
     results_df["normalized_section"] = results_df["الدائرة"].apply(normalize_text)
     accountants_df["normalized_section"] = accountants_df["الدائرة"].apply(normalize_text)
 
-    # إضافة عمود فارغ للنتائج
+    # إضافة أعمدة فارغة للنتائج
     results_df["اليوزر"] = ""
     results_df["اسم المحاسب"] = ""
+    results_df["الباسورد"] = ""
 
     # مطابقة تقريبية على الدائرة
     for i, res_row in results_df.iterrows():
@@ -33,6 +34,7 @@ def add_accountant_info(results_df, accountants_df):
         if best_score >= 80:  # نسبة ثقة عالية
             results_df.at[i, "اليوزر"] = accountants_df.at[best_index, "اليوزر"]
             results_df.at[i, "اسم المحاسب"] = accountants_df.at[best_index, "اسم المحاسب"]
+            results_df.at[i, "الباسورد"] = accountants_df.at[best_index, "الباسورد"]
 
     # إزالة العمود المؤقت
     results_df.drop(columns=["normalized_section"], inplace=True)
@@ -41,7 +43,7 @@ def add_accountant_info(results_df, accountants_df):
 # واجهة Streamlit
 def main():
     st.set_page_config(page_title="برنامج المطابقة مع المحاسبين", layout="wide")
-    st.title("برنامج إضافة المحاسب لنتائج المطابقة")
+    st.title("برنامج إضافة المحاسب واليوزر والباسورد لنتائج المطابقة")
 
     uploaded_results = st.file_uploader("اختر ملف نتائج المطابقة (Excel)", type=["xlsx"])
     uploaded_accounts = st.file_uploader("اختر ملف المحاسبين (Excel)", type=["xlsx"])
